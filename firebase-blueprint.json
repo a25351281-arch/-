@@ -1,0 +1,99 @@
+{
+  "entities": {
+    "Student": {
+      "title": "Student",
+      "description": "초등학교 4학년 학생 정보",
+      "type": "object",
+      "properties": {
+        "studentKey": { "type": "string", "description": "학생 고유키 (예: 2026-4-1-05)" },
+        "year": { "type": "number", "description": "학년도" },
+        "grade": { "type": "number", "description": "학년" },
+        "classNum": { "type": "number", "description": "반" },
+        "studentNum": { "type": "number", "description": "번호" },
+        "name": { "type": "string", "description": "학생 이름" },
+        "passwordHash": { "type": "string", "description": "비밀번호 SHA-256 해시" },
+        "mustResetPassword": { "type": "boolean", "description": "비밀번호 초기화 필요 여부" },
+        "createdAt": { "type": "string", "description": "등록 일시" }
+      },
+      "required": ["studentKey", "year", "grade", "classNum", "studentNum", "name", "passwordHash"]
+    },
+    "TypingRecord": {
+      "title": "TypingRecord",
+      "description": "타자 연습 및 미션 수행 기록",
+      "type": "object",
+      "properties": {
+        "studentKey": { "type": "string", "description": "학생 고유키" },
+        "studentName": { "type": "string", "description": "학생 이름" },
+        "missionType": { "type": "string", "enum": ["acid_rain", "target_cpm", "zero_error"], "description": "미션 종류" },
+        "cpm": { "type": "number", "description": "분당 타수" },
+        "accuracy": { "type": "number", "description": "정확도 (%)" },
+        "isSuccess": { "type": "boolean", "description": "미션 성공 여부" },
+        "score": { "type": "number", "description": "획득 점수" },
+        "mistakes": { "type": "string", "description": "틀린 단어/문장 목록" },
+        "timestamp": { "type": "string", "description": "기록 일시" }
+      },
+      "required": ["studentKey", "missionType", "cpm", "accuracy", "isSuccess", "timestamp"]
+    },
+    "StudentSummary": {
+      "title": "StudentSummary",
+      "description": "학생별 종합 성취도 요약",
+      "type": "object",
+      "properties": {
+        "studentKey": { "type": "string", "description": "학생 고유키" },
+        "name": { "type": "string", "description": "학생 이름" },
+        "classNum": { "type": "number", "description": "반" },
+        "studentNum": { "type": "number", "description": "번호" },
+        "maxCpm": { "type": "number", "description": "최고 타수" },
+        "avgAccuracy": { "type": "number", "description": "평균 정확도" },
+        "completedMissions": { "type": "string", "description": "달성한 미션 목록" },
+        "totalPlays": { "type": "number", "description": "총 연습 횟수" },
+        "lastUpdated": { "type": "string", "description": "최종 업데이트 일시" }
+      },
+      "required": ["studentKey", "name", "maxCpm", "avgAccuracy", "lastUpdated"]
+    },
+    "AppSetting": {
+      "title": "AppSetting",
+      "description": "학급 설정 및 교사용 설정",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string", "description": "설정 키" },
+        "classPasswordHash": { "type": "string", "description": "학급 공통 비밀번호 해시" },
+        "teacherPasswordHash": { "type": "string", "description": "교사용 비밀번호 해시" }
+      },
+      "required": ["key"]
+    },
+    "TestConnection": {
+      "title": "TestConnection",
+      "description": "Firestore CRUD 연결 테스트용 엔터티",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "description": "상태" },
+        "message": { "type": "string", "description": "테스트 메시지" },
+        "timestamp": { "type": "string", "description": "테스트 시간" }
+      },
+      "required": ["status", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/students/{studentKey}": {
+      "schema": "Student",
+      "description": "학생 계정 및 인증 정보"
+    },
+    "/typingRecords/{recordId}": {
+      "schema": "TypingRecord",
+      "description": "타자 연습 및 미션 기록"
+    },
+    "/studentSummary/{studentKey}": {
+      "schema": "StudentSummary",
+      "description": "학생 성취도 요약 통계"
+    },
+    "/settings/{settingId}": {
+      "schema": "AppSetting",
+      "description": "학급 및 교사 관리 설정"
+    },
+    "/test_connection/{testId}": {
+      "schema": "TestConnection",
+      "description": "교사용 Firestore CRUD 검증 테스트용"
+    }
+  }
+}

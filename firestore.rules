@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 4학년 국어 타자 왕 - 학급 단위 타자 연습 웹앱 규칙
+    
+    // 학생 정보 컬렉션
+    match /students/{studentKey} {
+      allow read, write: if true;
+    }
+    
+    // 타자 연습 및 미션 기록
+    match /typingRecords/{recordId} {
+      allow read, write: if true;
+    }
+    
+    // 학생 요약 통계
+    match /studentSummary/{studentKey} {
+      allow read, write: if true;
+    }
+    
+    // 학급 공통 설정 (교사용 비밀번호, 학급 암호 등)
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+    
+    // 실제 Firestore CRUD 연결 검증 테스트 컬렉션 (생성, 읽기, 수정, 삭제)
+    match /test_connection/{testId} {
+      allow read, write, delete: if true;
+    }
+    
+    // 기본 차단
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
